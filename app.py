@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, redirect, url_for, render_template, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import ResNet152
@@ -7,7 +8,9 @@ from tensorflow.keras.applications.resnet import preprocess_input
 import xgboost as xgb
 import numpy as np
 
+
 app = Flask(__name__)
+CORS(app)
 
 # Dosya yükleme klasörü
 UPLOAD_FOLDER = 'uploads'
