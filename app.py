@@ -23,16 +23,16 @@ def home():
     prediction = request.args.get("prediction")
     return render_template("home.html", prediction=prediction)
 
-# Tahmin yapma
 @app.route('/predict', methods=['POST'])
 def predict():
     # Dosya yükleme işlemi
     if 'img' not in request.files:
-        return "No file part"
+        return jsonify({'error': 'No file part found'}), 400
+    
     img_file = request.files['img']
     
     if img_file.filename == '':
-        return "No selected file"
+        return jsonify({'error': 'No file selected'}), 400
     
     # Dosya yolunu güvenli bir şekilde oluştur ve yükle
     filename = secure_filename(img_file.filename)
@@ -58,8 +58,9 @@ def predict():
     # Tahmin yap
     prediction = model.predict(features)
     
-    # Sonucu göster
-    return redirect(url_for("home", prediction=int(prediction[0])))
+    # Sonucu JSON olarak döndür
+    return jsonify({'prediction': int(prediction[0])})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
