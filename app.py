@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug.utils import secure_filename
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications import ResNet152
@@ -23,6 +23,7 @@ def home():
     prediction = request.args.get("prediction")
     return render_template("home.html", prediction=prediction)
 
+# Tahmin yapma
 @app.route('/predict', methods=['POST'])
 def predict():
     # Dosya yükleme işlemi
@@ -60,7 +61,6 @@ def predict():
     
     # Sonucu JSON olarak döndür
     return jsonify({'prediction': int(prediction[0])})
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
